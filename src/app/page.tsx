@@ -1,53 +1,63 @@
-import Link from "next/link";
-
-import { LatestPost } from "@/app/_components/post";
-import { HydrateClient, api } from "@/trpc/server";
-
-export default async function Home() {
-	const hello = await api.post.hello({ text: "from tRPC" });
-
-	void api.post.getLatest.prefetch();
-
-	return (
-		<HydrateClient>
-			<main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c] text-white">
-				<div className="container flex flex-col items-center justify-center gap-12 px-4 py-16">
-					<h1 className="font-extrabold text-5xl tracking-tight sm:text-[5rem]">
-						Create <span className="text-[hsl(280,100%,70%)]">T3</span> App
-					</h1>
-					<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-8">
-						<Link
-							className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 hover:bg-white/20"
-							href="https://create.t3.gg/en/usage/first-steps"
-							target="_blank"
-						>
-							<h3 className="font-bold text-2xl">First Steps →</h3>
-							<div className="text-lg">
-								Just the basics - Everything you need to know to set up your
-								database and authentication.
-							</div>
-						</Link>
-						<Link
-							className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 hover:bg-white/20"
-							href="https://create.t3.gg/en/introduction"
-							target="_blank"
-						>
-							<h3 className="font-bold text-2xl">Documentation →</h3>
-							<div className="text-lg">
-								Learn more about Create T3 App, the libraries it uses, and how
-								to deploy it.
-							</div>
-						</Link>
-					</div>
-					<div className="flex flex-col items-center gap-2">
-						<p className="text-2xl text-white">
-							{hello ? hello.greeting : "Loading tRPC query..."}
-						</p>
-					</div>
-
-					<LatestPost />
-				</div>
-			</main>
-		</HydrateClient>
-	);
+import Link from "next/link"
+import Navbar from "./components/ui/nav"
+import { Hero8 } from "@/app/components/ui/hero"
+import { Timeline3 } from "./components/ui/features"
+import { Testimonial14 } from "./components/ui/testimonials"
+import {Footer7} from "./components/ui/footer"
+export default function Home() {
+	const features = [
+    {
+      image: "https://imgs.search.brave.com/hsKWRp14wQhEvK__Dkz4NTj3uJM_7DHMHZTWllQlulE/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/ZnJlZS1waG90by9i/dXNpbmVzc21hbi1i/b3hpbmctY29ucGV0/aXRpb24tZmlnaHRp/bmctc3BvcnQtYWdy/ZXNzaXZlLWNvbmNl/cHRfNTM4NzYtMTIw/MzY0LmpwZz9zZW10/PWFpc19oeWJyaWQm/dz03NDA",
+      title: "Find an Opponent",
+      description: "Join the matchmaking queue and get paired with a coder of similar skill."
+    },
+    {
+      image: "https://img.freepik.com/premium-photo/hand-holding-drawing-virtual-lightbulb-with-brain-bokeh-background-creative-smart-thinking-idea-concep_50039-3033.jpg?ga=GA1.1.2081559228.1747904061&semt=ais_hybrid&w=740",
+      title: "Solve the Challenge",
+      description: "Compete head-to-head by solving coding problems in real-time."
+    },
+    {
+      image: "https://img.freepik.com/free-vector/leader-concept-illustration_114360-7854.jpg?ga=GA1.1.2081559228.1747904061&semt=ais_hybrid&w=740",
+      title: "Earn Elo & Climb Ranks",
+      description: "Win matches to increase your Elo rating and climb the leaderboard."
+    },
+    {
+      image: "https://img.freepik.com/free-vector/rising-concept-illustration_114360-930.jpg?ga=GA1.1.2081559228.1747904061&semt=ais_hybrid&w=740",
+      title: "Improve Your Skills",
+      description: "Analyze match results, learn from your mistakes, and get better every day."
+    }
+  ]
+  return (
+    <main className="min-h-screen w-full bg-background text-foreground">
+      <Navbar />
+      <section className="px-4 sm:px-6 md:px-10 max-w-7xl mx-auto">
+        <Hero8 />
+      </section>
+      <section className="px-4 sm:px-6 md:px-10 max-w-7xl mx-auto mt-10">
+        <Timeline3 
+		heading="How CodeLo Works" 
+		description="Join coding battles, improve your skills, and climb the ranks with our real-time 1v1 challenges."
+		features={features}
+		buttons={
+			{
+				primary: {
+					text: "Get Started",
+					url: "/signup"
+				},
+				secondary: {
+					text: "Learn More",
+					url: "/about"
+				}
+			}
+		}
+		/>
+      </section>
+      <section className="px-4 sm:px-6 md:px-10 max-w-7xl mx-auto mt-10">
+        <Testimonial14 />
+        </section>
+    <section className="px-4 sm:px-6 md:px-10 max-w-7xl mx-auto mt-10">
+    <Footer7 />
+    </section>
+    </main>
+  )
 }
