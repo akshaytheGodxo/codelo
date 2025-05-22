@@ -24,7 +24,7 @@ export default function Navbar() {
             Login
           </Link>
           <Link
-            href="/signup"
+            href="/signup "
             className="px-4 py-2 rounded-md bg-gradient-to-r from-indigo-500 to-purple-600 text-white text-sm font-medium"
           >
             Join Now
