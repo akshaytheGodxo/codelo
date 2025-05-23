@@ -1,135 +1,100 @@
-"use client";
+'use client';
 
 import { FcGoogle } from "react-icons/fc";
 
 import { Button } from "@/app/components/ui/button";
 import { Input } from "@/app/components/ui/input";
-import { Label } from "@/app/components/ui/label";
+
 import { trpc } from "@/lib/trpc";
-interface Signup2Props {
+
+interface Login3Props {
   heading?: string;
   subheading?: string;
   logo: {
     url: string;
     src: string;
     alt: string;
-    title: string;
   };
-  signupText?: string;
-  googleText?: string;
   loginText?: string;
-  loginUrl?: string;
+  googleText?: string;
+  signupText?: string;
+  signupUrl?: string;
 }
 
-const Signup2 = ({
+const Login3 = ({
   heading = "Signup",
-  subheading = "Create a new account",
+  subheading = "Create an account",
   logo = {
     url: "https://www.shadcnblocks.com",
-    src: "https://shadcnblocks.com/images/block/block-1.svg",
-    alt: "logo",
-    title: "shadcnblocks.com",
+    src: "https://shadcnblocks.com/images/block/logos/shadcnblockscom-icon.svg",
+    alt: "Shadcnblocks",
   },
+  signupText = "Sign up",
   googleText = "Sign up with Google",
-  signupText = "Create an account",
-  loginText = "Already have an account?",
-  loginUrl = "#",
-}: Signup2Props) => {
-    const createAccount = trpc.auth.createAccount.useMutation();
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        const formData = new FormData(e.currentTarget);
-        const email = formData.get("email") as string;
-        const name = formData.get("username") as string;
-        const password = formData.get("password") as string;
+  signupUrl = "#",
+}: Login3Props) => {
 
-        try {
-            const user = await createAccount.mutateAsync({
-                email,
-                name,
-                password,
-            })
-            if (user) {
-                console.log("User created successfully", user);
-            }
+  const createAccount = trpc.auth.createAccount.useMutation({});
+  const handleSubmit = async (e:React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const email = formData.get("email") as string;
+    const password = formData.get("password") as string;
 
-        } catch (error) {
-            console.error("Error creating user", error);
-        }
+    try {
+      const user = await createAccount.mutateAsync({
+        email,
+        name: "test",
+        password,
+      })
+      if (!user) {
+        console.error("User not created");
+        return ;
+      }
+    } catch (error) {
+      console.error("Error creating user: ", error);
     }
+  }
 
   return (
-    <section className="h-screen bg-muted">
-      <div className="flex h-full items-center justify-center">
-        <div className="flex w-full max-w-sm flex-col items-center gap-y-8">
-          <div className="flex flex-col items-center gap-y-2">
-            {/* Logo */}
-            <div className="flex items-center gap-1 lg:justify-start">
-              <a href="https://shadcnblocks.com">
-                <img
-                  src={logo.src}
-                  alt={logo.alt}
-                  title={logo.title}
-                  className="h-12"
-                />
+    <section className="py-32">
+      <div className="container">
+        <div className="flex flex-col gap-4">
+          <div className="mx-auto w-full bg-[#1a1513] max-w-sm rounded-md p-6 shadow">
+            <div className="mb-6 flex flex-col items-center">
+              <a href={logo.url} className="mb-6 flex items-center gap-2">
+                <img src={logo.src} className="max-h-8" alt={logo.alt} />
               </a>
+              <h1 className="mb-2 text-2xl font-bold">{heading}</h1>
+              <p className="text-muted-foreground">{subheading}</p>
             </div>
-            <h1 className="text-3xl font-semibold">{heading}</h1>
-            <p className="text-sm text-muted-foreground">{subheading}</p>
-          </div>
-          <form action="" onSubmit={handleSubmit} className="w-full">
-              <div className="flex w-full flex-col gap-8 rounded-md border border-muted  px-6 py-12 shadow-md">
-                <div className="flex flex-col gap-6">
-                  <div className="flex flex-col gap-2">
-                    <Label>Email</Label>
-                    <Input
-                      type="email"
-                      placeholder="Enter your email"
-                      required
-                      className=""
-                      name="email"
-                    />
-                  </div>
-                  <div className="flex flex-col gap-2">
-                    <Label>Username</Label>
-                    <Input
-                      type="text"
-                      placeholder="Enter your username"
-                      required
-                      className=""
-                      name="username"
-                    />
-                  </div>
-                  <div className="flex flex-col gap-2">
-                    <Label>Password</Label>
-                    <Input
-                      type="password"
-                      placeholder="Enter your password"
-                      required
-                      className=""
-                      name="password"
-                    />
-                  </div>
-                  <div className="flex flex-col gap-4">
-                    <Button type="submit" className="mt-2 w-full cursor-pointer">
-                      {signupText}
-                    </Button>
-                    <Button variant="outline" className="w-full">
-                      <FcGoogle className="mr-2 size-5" />
-                      {googleText}
-                    </Button>
-                  </div>
+            <div>
+              <form className="grid gap-4" onSubmit={handleSubmit}>
+                <Input type="email" placeholder="Enter your email" name="email" required />
+                <div>
+                  <Input
+                    type="password"
+                    placeholder="Enter your password"
+                    name="password"
+                    required
+                  />
                 </div>
+
+                <Button type="submit" className="mt-2 w-full bg-[#7c7cff]">
+                  {signupText}
+                </Button>
+                <Button variant="outline" className="w-full">
+                  <FcGoogle className="mr-2 size-5" />
+                  {googleText}
+                </Button>
+              </form>
+              <div className="mx-auto mt-8 flex justify-center gap-1 text-sm text-muted-foreground">
+                <p>{signupText}</p>
+                <a href={signupUrl} className="font-medium text-primary">
+                  Sign up
+                </a>
               </div>
-          </form>
-          <div className="flex justify-center gap-1 text-sm text-muted-foreground">
-            <p>{loginText}</p>
-            <a
-              href={loginUrl}
-              className="font-medium text-primary hover:underline"
-            >
-              Log in
-            </a>
+            </div>
           </div>
         </div>
       </div>
@@ -137,4 +102,4 @@ const Signup2 = ({
   );
 };
 
-export default Signup2;
+export default Login3;

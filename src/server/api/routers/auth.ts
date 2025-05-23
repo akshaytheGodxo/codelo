@@ -31,5 +31,39 @@ export const authRouter = createTRPCRouter({
             name: user.name,
         }
 
+    }),
+
+
+    login: publicProcedure.input(
+        z.object({
+            email: z.string().email(),
+            password: z.string(),
+        })
+    ).mutation(async ({ ctx, input }) => {
+        const { email, password } = input;
+        
+        const user = await ctx.db.user.findFirst({
+            where: {
+                email,
+                
+            }
+        })
+
+
+        if (!user) {
+            throw new Error("User not found");
+            return null;
+        }
+
+        if (user.password !== password) {
+            throw new Error("Invalid password");
+            return null;
+        }
+
+        return {
+            id: user.id,
+            email: user.email,
+            name: user.name,
+        }
     })
 })
