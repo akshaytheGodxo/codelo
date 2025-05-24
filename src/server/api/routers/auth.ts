@@ -1,6 +1,7 @@
 import { z } from "zod";
-
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
+import { signJwt, verifyJwt } from "@/lib/session";
+import { cookies } from "next/headers";
 
 export const authRouter = createTRPCRouter({
     createAccount: publicProcedure.input(
@@ -49,7 +50,6 @@ export const authRouter = createTRPCRouter({
             }
         })
 
-
         if (!user) {
             throw new Error("User not found");
             return null;
@@ -59,11 +59,28 @@ export const authRouter = createTRPCRouter({
             throw new Error("Invalid password");
             return null;
         }
-
+        const token = signJwt({ userId: user.id });
+        
+        console.log("JWT Token:", token); // Log the JWT token
         return {
             id: user.id,
             email: user.email,
             name: user.name,
+            token: token,
         }
+    }),
+
+    getSession: publicProcedure.query(async ({ ctx }) => {
+        if (!ctx.token) {
+            return null;
+        }
+        const mainToken = ctx.token;
+        console.log("Token from context: ", ctx.token);
+        const payload = verifyJwt(ctx.token);;
+        if (!payload) {
+            return null;
+        }
+
+        return { payload, success: true, mainToken };
     })
 })

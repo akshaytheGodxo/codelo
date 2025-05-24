@@ -1,8 +1,19 @@
-export default function Dashboard() {   
-    return (
-        <div className="flex flex-col items-center justify-center min-h-screen py-2">
-        <h1 className="text-4xl font-bold">Dashboard</h1>
-        <p className="mt-4 text-lg">Welcome to your dashboard!</p>
-        </div>
-    );
+"use client";
+import { trpc } from "@/lib/trpc"
+
+export default function Dashboaard() {
+    const session = trpc.auth.getSession.useQuery();
+    if (session) {
+        console.log("Succes: ", session?.data?.mainToken);
+
+    } else {
+        console.log("Failed");
     }
+    return (
+        <>
+            <div className="">
+
+            </div>
+        </>
+    )
+}

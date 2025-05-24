@@ -1,8 +1,11 @@
 // components/Navbar.tsx
 "use client";
 import Link from 'next/link'
-
+import { trpc } from "@/lib/trpc"
 export default function Navbar() {
+    const session = trpc.auth.getSession.useQuery();
+    console.log("Session Data: ", session.data);
+    const isAuthenticated = session.data?.mainToken ? true : false;
   return (
     <header className="w-full border-b border-gray-800">
       <div className="mx-auto max-w-7xl px-4 py-3 flex justify-between items-center">
@@ -16,7 +19,7 @@ export default function Navbar() {
           <Link href="/leaderboard" className="hover:text-white">Leaderboard</Link>
         </nav>
 
-        <div className="flex items-center gap-4">
+        {isAuthenticated === true ? <div className="flex items-center gap-4">
           <Link
             href="/login"
             className="text-sm text-gray-300 hover:text-white"
@@ -30,6 +33,16 @@ export default function Navbar() {
             Join Now
           </Link>
         </div>
+        
+          : 
+          <Link
+            href={"/dash"}
+            className="px-4 py-2 rounded-md bg-gradient-to-r from-indigo-500 to-purple-600 text-white text-sm font-medium"
+
+          >
+            Get Started
+          </Link>
+      }
       </div>
     </header>
   )

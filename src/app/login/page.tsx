@@ -53,8 +53,15 @@ const Login3 = ({
                 console.error("User not found");
                 return ;
             }
+            console.log("User logged in!!!", user.token);
+            
+            await fetch("/api/set-token", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ token: user.token }),
+            });
 
-            console.log("User logged in!!!");
+            
             router.push("/dash");
         } catch (error) {
             console.error("Error loggin in: ", error);

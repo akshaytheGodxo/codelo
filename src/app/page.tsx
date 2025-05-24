@@ -4,7 +4,13 @@ import { Hero8 } from "@/app/components/ui/hero"
 import { Timeline3 } from "./components/ui/features"
 import { Testimonial14 } from "./components/ui/testimonials"
 import {Footer7} from "./components/ui/footer"
+
+import { trpc } from "@/lib/trpc"
+
 export default function Home() {
+
+
+
 	const features = [
     {
       image: "https://imgs.search.brave.com/hsKWRp14wQhEvK__Dkz4NTj3uJM_7DHMHZTWllQlulE/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/ZnJlZS1waG90by9i/dXNpbmVzc21hbi1i/b3hpbmctY29ucGV0/aXRpb24tZmlnaHRp/bmctc3BvcnQtYWdy/ZXNzaXZlLWNvbmNl/cHRfNTM4NzYtMTIw/MzY0LmpwZz9zZW10/PWFpc19oeWJyaWQm/dz03NDA",
