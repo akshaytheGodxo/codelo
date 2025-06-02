@@ -19,7 +19,7 @@ export default function Navbar() {
           <Link href="/leaderboard" className="hover:text-white">Leaderboard</Link>
         </nav>
 
-        {isAuthenticated === true ? <div className="flex items-center gap-4">
+        {isAuthenticated !== true ? <div className="flex items-center gap-4">
           <Link
             href="/login"
             className="text-sm text-gray-300 hover:text-white"

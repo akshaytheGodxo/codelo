@@ -82,5 +82,29 @@ export const authRouter = createTRPCRouter({
         }
 
         return { payload, success: true, mainToken };
+    }),
+
+    getUser: publicProcedure.input(
+        z.object({
+            userId: z.number(),
+        })
+    ).mutation(async ({ ctx, input }) => {
+        const { userId } = input;
+        const user = await ctx.db.user.findFirst({
+            where: {
+                id: userId,
+            }
+        })
+
+        if (!user) {
+            throw new Error("No user was found");
+            return null;
+        }
+        const output = {
+            id: user.id,
+            name: user.name,
+            email: user.email
+        }
+        return output;
     })
 })

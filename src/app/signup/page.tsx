@@ -39,12 +39,13 @@ const Login3 = ({
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const email = formData.get("email") as string;
+    const name = formData.get("name") as string;
     const password = formData.get("password") as string;
 
     try {
       const user = await createAccount.mutateAsync({
         email,
-        name: "test",
+        name,
         password,
       })
       if (!user) {
@@ -71,6 +72,7 @@ const Login3 = ({
             <div>
               <form className="grid gap-4" onSubmit={handleSubmit}>
                 <Input type="email" placeholder="Enter your email" name="email" required />
+                <Input type="name" placeholder="Enter your name" name="name" required />
                 <div>
                   <Input
                     type="password"

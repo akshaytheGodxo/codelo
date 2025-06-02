@@ -34,7 +34,7 @@ export default function Home() {
     }
   ]
   return (
-    <main className="min-h-screen w-full bg-background text-foreground">
+    <main className="min-h-screen w-full bg-black text-white">
       <Navbar />
       <section className="px-4 sm:px-6 md:px-10 max-w-7xl mx-auto">
         <Hero8 />
