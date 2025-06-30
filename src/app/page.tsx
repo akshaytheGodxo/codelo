@@ -5,38 +5,21 @@ import { Hero8 } from "@/app/components/ui/hero"
 import { Timeline3 } from "./components/ui/features"
 import { Testimonial14 } from "./components/ui/testimonials"
 import { Footer7 } from "./components/ui/footer"
-import { socket } from "@/lib/socket-hooks"
 import { useEffect, useState } from "react";
-
+import useWebSocketConnectionHook from "@/lib/socket-hooks";
+import { WebsocketEventEnum } from "@/app/typings/platforms";
 export default function Home() {
   const [isConnected, setIsConnected] = useState(false);
   const [transport, setTransport] = useState("N/A");
+
+  useWebSocketConnectionHook(() => {
+    console.log("WebSocket connected");
+    setIsConnected(true);
+  }, WebsocketEventEnum.Connected);
+
+
   useEffect(() => {
-    if (socket.connected) {
-      onConnect();
-    }
-
-    function onConnect() {
-      setIsConnected(true);
-      setTransport(socket.io.engine.transport.name);
-
-      socket.io.engine.on("upgrade", (transport) => {
-        setTransport(transport.name);
-      });
-    }
-
-    function onDisconnect() {
-      setIsConnected(false);
-      setTransport("N/A");
-    }
-
-    socket.on("connect", onConnect);
-    socket.on("disconnect", onDisconnect);
-
-    return () => {
-      socket.off("connect", onConnect);
-      socket.off("disconnect", onDisconnect);
-    };
+   
   }, []);
 
   const features = [
