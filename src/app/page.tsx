@@ -1,17 +1,45 @@
+"use client";
 import Link from "next/link"
 import Navbar from "./components/ui/nav"
 import { Hero8 } from "@/app/components/ui/hero"
 import { Timeline3 } from "./components/ui/features"
 import { Testimonial14 } from "./components/ui/testimonials"
-import {Footer7} from "./components/ui/footer"
-
-import { trpc } from "@/lib/trpc"
+import { Footer7 } from "./components/ui/footer"
+import { socket } from "@/lib/socket-hooks"
+import { useEffect, useState } from "react";
 
 export default function Home() {
+  const [isConnected, setIsConnected] = useState(false);
+  const [transport, setTransport] = useState("N/A");
+  useEffect(() => {
+    if (socket.connected) {
+      onConnect();
+    }
 
+    function onConnect() {
+      setIsConnected(true);
+      setTransport(socket.io.engine.transport.name);
 
+      socket.io.engine.on("upgrade", (transport) => {
+        setTransport(transport.name);
+      });
+    }
 
-	const features = [
+    function onDisconnect() {
+      setIsConnected(false);
+      setTransport("N/A");
+    }
+
+    socket.on("connect", onConnect);
+    socket.on("disconnect", onDisconnect);
+
+    return () => {
+      socket.off("connect", onConnect);
+      socket.off("disconnect", onDisconnect);
+    };
+  }, []);
+
+  const features = [
     {
       image: "https://imgs.search.brave.com/hsKWRp14wQhEvK__Dkz4NTj3uJM_7DHMHZTWllQlulE/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/ZnJlZS1waG90by9i/dXNpbmVzc21hbi1i/b3hpbmctY29ucGV0/aXRpb24tZmlnaHRp/bmctc3BvcnQtYWdy/ZXNzaXZlLWNvbmNl/cHRfNTM4NzYtMTIw/MzY0LmpwZz9zZW10/PWFpc19oeWJyaWQm/dz03NDA",
       title: "Find an Opponent",
@@ -33,6 +61,9 @@ export default function Home() {
       description: "Analyze match results, learn from your mistakes, and get better every day."
     }
   ]
+
+  console.log("Socket connected:", isConnected);
+  console.log("Socket transport:", transport);
   return (
     <main className="min-h-screen w-full bg-black text-white">
       <Navbar />
@@ -40,30 +71,30 @@ export default function Home() {
         <Hero8 />
       </section>
       <section className="px-4 sm:px-6 md:px-10 max-w-7xl mx-auto mt-10">
-        <Timeline3 
-		heading="How CodeLo Works" 
-		description="Join coding battles, improve your skills, and climb the ranks with our real-time 1v1 challenges."
-		features={features}
-		buttons={
-			{
-				primary: {
-					text: "Get Started",
-					url: "/signup"
-				},
-				secondary: {
-					text: "Learn More",
-					url: "/about"
-				}
-			}
-		}
-		/>
+        <Timeline3
+          heading="How CodeLo Works"
+          description="Join coding battles, improve your skills, and climb the ranks with our real-time 1v1 challenges."
+          features={features}
+          buttons={
+            {
+              primary: {
+                text: "Get Started",
+                url: "/signup"
+              },
+              secondary: {
+                text: "Learn More",
+                url: "/about"
+              }
+            }
+          }
+        />
       </section>
       <section className="px-4 sm:px-6 md:px-10 max-w-7xl mx-auto mt-10">
         <Testimonial14 />
-        </section>
-    <section className="px-4 sm:px-6 md:px-10 max-w-7xl mx-auto mt-10">
-    <Footer7 />
-    </section>
+      </section>
+      <section className="px-4 sm:px-6 md:px-10 max-w-7xl mx-auto mt-10">
+        <Footer7 />
+      </section>
     </main>
   )
 }
