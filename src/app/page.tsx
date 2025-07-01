@@ -6,16 +6,10 @@ import { Timeline3 } from "./components/ui/features"
 import { Testimonial14 } from "./components/ui/testimonials"
 import { Footer7 } from "./components/ui/footer"
 import { useEffect, useState } from "react";
-import useWebSocketConnectionHook from "@/lib/socket-hooks";
-import { WebsocketEventEnum } from "@/app/typings/platforms";
+
 export default function Home() {
   const [isConnected, setIsConnected] = useState(false);
   const [transport, setTransport] = useState("N/A");
-
-  useWebSocketConnectionHook(() => {
-    console.log("WebSocket connected");
-    setIsConnected(true);
-  }, WebsocketEventEnum.Connected);
 
 
   useEffect(() => {
